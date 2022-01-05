@@ -1,0 +1,36 @@
+version: '3.4'
+services:
+  app:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:alpine
+    environment:
+      POSTGRES_DB: debug
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      TZ: 'UTC'
+      PGTZ: 'UTC'
+    ports:
+      - 5435:5432
+
+  worker:
+    build: .
+    command: celery --app=coinmena.worker.celery_app worker --loglevel=info -B
+    depends_on:
+      - postgres
+      - redis
+
+  redis:
+    image: redis
+    expose:
+      - 6379
+    ports:
+      - 6381:6379

@@ -15,7 +15,13 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from rest_framework.routers import SimpleRouter
+
+from coinmena.views import APIViewSet
+
+router = SimpleRouter()
+router.register("api/v1/quotes", APIViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-]
+] + router.urls
