@@ -2,7 +2,7 @@ Simple Exchange rate tracker
 ------
 
 
-to run
+To run
 --
 
 ```
@@ -11,13 +11,13 @@ docker-compose up
 
 
 
-to add data
---
+To add data
+------------
 
 ```
 using docker
 ------------
-docker exec -it app <command>
+docker-compose exec  app <command>
 
 
 run these
@@ -32,7 +32,7 @@ python manage.py add_coin_pair BTC USD
 ```
 
 
-to test
+To test
 ---------
 
 - Fetch last five prices 
@@ -86,4 +86,22 @@ curl -X POST localhost:8000/api/v1/quotes/ | json_pp
    "success" : true
 }
 
+```
+
+
+You will need authentication
+--------
+
+- create a user
+```
+docker-compose exec  app python manage.py createsuperuser
+```
+
+- create a token
+```bash
+docker-compose exec app python manage.py drf_create_token <username>
+```
+
+```bash
+curl -H "Authorization: Token <token>" localhost:8000/api/v1/quotes/
 ```
